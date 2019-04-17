@@ -2,48 +2,51 @@
 <!DOCTYPE generatorConfiguration
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
-<generatorConfiguration>
+
 <!-- 配置Run As Maven build : Goals 参数 : mybatis-generator:generate -Dmybatis.generator.overwrite=true -->
+<!-- 配置 tableName,使用 Run As Maven build 生成 dao model 层 -->
+<generatorConfiguration>
+    <!-- 配置文件路径 -->
+    <properties url="${mybatis.generator.generatorConfig.properties}"/>
 
-     <!-- 导入配置文件 -->
-    <properties resource="application.properties"/>
+    <!--数据库驱动包路径 -->
+    <classPathEntry location="${drive.class.path}"/>
 
-    <!-- defaultModelType="flat" 设置复合主键时不单独为主键创建实体 -->
-    <context id="MySql" defaultModelType="flat">
-
-        <!-- 生成的POJO实现java.io.Serializable接口 -->
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
-
-        <!--注释-->
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--关闭注释 -->
         <commentGenerator>
-            <!-- 将数据库中表的字段描述信息添加到注释 -->
-            <property name="addRemarkComments" value="true"/>
-            <!-- 注释里不添加日期 -->
-            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
         </commentGenerator>
-        <!-- 数据库连接，直接通过${}读取application.properties里的配置 -->
-        <jdbcConnection
-                driverClass="${spring.datasource.driverClassName}"
-                connectionURL="${spring.datasource.url}"
-                userId="${spring.datasource.username}"
-                password="${spring.datasource.password}"/>
 
-        <!-- 生成POJO对象，并将类放到com.songguoliang.springboot.entity包下 -->
-        <javaModelGenerator targetPackage="com.ln.springBoot.web.bean" targetProject="src/main/java"></javaModelGenerator>
-        <!-- 生成mapper xml文件，并放到resources下的mapper文件夹下 -->
-        <sqlMapGenerator targetPackage="com.ln.springBoot.web.mapper"  targetProject="src/main/java"></sqlMapGenerator>
+        <!--数据库连接信息 -->
+        <jdbcConnection driverClass="${spring.datasource.driverClassName}"
+        				connectionURL="${spring.datasource.url}" 
+        				userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+        </jdbcConnection>
 
+        <!--生成的model 包路径 -->
+        <javaModelGenerator targetPackage="${model.package}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="ture"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
 
-        <!-- 生成mapper xml对应dao接口，放到com.songguoliang.springboot.mapper包下-->
-        <javaClientGenerator targetPackage="com.ln.springBoot.web.mapper" targetProject="src/main/java" type="XMLMAPPER"></javaClientGenerator>
+        <!--生成xml mapper文件 路径 -->
+        <sqlMapGenerator targetPackage="${xml.mapper.package}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="ture"/>
+        </sqlMapGenerator>
 
-        <!-- table标签可以有多个，至少一个，tableName指定表名，可以使用_和%通配符 -->
-        <table tableName="student">
-            <!-- 是否只生成POJO对象 -->
-            <property name="modelOnly" value="false"/>
-            <!-- 数据库中表名有时我们都会带个前缀，而实体又不想带前缀，这个配置可以把实体的前缀去掉 -->
-          <!--   <domainObjectRenamingRule searchString="^Tbl" replaceString=""/> -->
+        <!-- 生成的Dao接口 的包路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${dao.package}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="ture"/>
+        </javaClientGenerator>
 
-        </table>
+        <!--对应数据库表名 -->
+        <table tableName="student"
+         enableCountByExample="false" 
+         enableUpdateByExample="false" 
+         enableDeleteByExample="false"   
+         enableSelectByExample="false"  
+        ></table> 
     </context>
 </generatorConfiguration>
