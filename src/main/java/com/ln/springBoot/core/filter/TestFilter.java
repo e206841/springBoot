@@ -10,7 +10,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
+
+import com.mysql.jdbc.log.Log;
 
 import ch.qos.logback.classic.selector.servlet.ContextDetachingSCL;
 /**
@@ -24,7 +27,7 @@ import ch.qos.logback.classic.selector.servlet.ContextDetachingSCL;
  */
 @Configuration
 public class TestFilter implements Filter{
-
+	Logger logger = Logger.getLogger(TestFilter.class);
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -37,6 +40,7 @@ public class TestFilter implements Filter{
 		HttpServletRequest req=(HttpServletRequest) request;
 		String requestURI = req.getRequestURI();
 		System.out.println(requestURI);
+		logger.info(requestURI);
 		chain.doFilter(request, response);
 	}
 

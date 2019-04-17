@@ -1,9 +1,11 @@
 package com.ln.springBoot.web.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ln.springBoot.core.filter.TestFilter;
 import com.ln.springBoot.core.properties.TestProperties;
 
 /**
@@ -17,10 +19,13 @@ import com.ln.springBoot.core.properties.TestProperties;
 @RestController
 @RequestMapping("/test")
 public class TestController {
+	Logger logger = Logger.getLogger(TestController.class);
+	
 	@Autowired
 	private  TestProperties pro;
 	@RequestMapping("/hello")
 	public String hello() {
+		logger.info("hello");
 		String name = pro.getName();
 		String title = pro.getTitle();
 		return "自定义配置,name:"+name+",title:"+title;
